@@ -1,0 +1,40 @@
+# .gitignore — Aegis AI
+
+# ─── Python (Backend) ───
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+*.egg
+.venv/
+venv/
+env/
+
+# ─── Node (Frontend) ───
+frontend/node_modules/
+frontend/dist/
+
+# ─── IDE ───
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ─── Data — KHÔNG commit dữ liệu thật ───
+backend/data/*
+!backend/data/.gitkeep
+!backend/data/sample/
+
+# ─── OS ───
+.DS_Store
+Thumbs.db
+
+# ─── Logs ───
+*.log
+
+# ─── Environment ───
+.env
+.env.local
+.env.*.local
