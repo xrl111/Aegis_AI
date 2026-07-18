@@ -1,0 +1,81 @@
+# Aegis AI — Configuration
+
+# ============================================================
+# THRESHOLDS — Chỉ admin thay đổi sau review hàng kỳ
+# Hệ thống KHÔNG tự động điều chỉnh các giá trị này
+# ============================================================
+
+thresholds:
+  # Robust z-score thresholds (so với baseline cá nhân)
+  grade_z_threshold: -2.0       # Điểm lệch ≥ 2σ so với baseline → flag
+  attendance_z_threshold: 2.0   # Tỷ lệ vắng tăng ≥ 2σ so với baseline → flag
+  submission_z_threshold: 2.0   # Tỷ lệ trễ/missing tăng ≥ 2σ → flag
+
+  # Persistence: số data points liên tiếp phải xấu để confirm
+  persistence_count: 2
+
+  # Seasonal filter: % cohort cùng decline → suppress alerts
+  seasonal_ratio: 0.40
+
+# ============================================================
+# BASELINE ENGINE
+# ============================================================
+
+baseline:
+  window_size: 10               # Số data points cho rolling window
+  mad_floor: 0.05               # Sàn MAD — tránh z-score bùng nổ khi HS consistent
+  min_window_ratio: 0.6         # Cần ≥ 60% data points trong window để tính
+
+# ============================================================
+# DATA SUFFICIENCY GATE
+# ============================================================
+
+data_gate:
+  min_grade_points: 4           # Ít nhất 4 assessments để tính grade signal
+  min_attendance_points: 6      # Ít nhất 6 buổi để tính attendance signal
+  min_submission_points: 3      # Ít nhất 3 bài đến hạn để tính submission signal
+
+# ============================================================
+# ALERT MANAGEMENT
+# ============================================================
+
+alert:
+  cooldown_days: 5              # Không lặp alert trong N ngày
+  expiry_days: 14               # Case tự đóng sau N ngày không có signal mới
+  meta_alert_threshold: 3       # Số cases/kỳ để trigger meta-alert
+
+# ============================================================
+# FUSION
+# ============================================================
+
+fusion:
+  min_signals_for_alert: 2      # Cần ≥ N signals xấu để trigger alert (Watch → Review)
+  min_active_signals: 2         # Cần ≥ N signals có data để evaluate
+
+# ============================================================
+# COURSE STRUCTURE
+# ============================================================
+
+course:
+  sessions_per_course: 18       # Số buổi học / môn
+  sessions_per_week: 3          # Tần suất
+  weeks_per_course: 6           # Thời lượng môn
+
+  assessment_structure:
+    lab: 4                      # Số bài lab
+    quiz: 4                     # Số quiz
+    asm: 2                      # Số assignment
+    exam: 1                     # Số bài thi
+
+# ============================================================
+# SEASONAL / CALENDAR EVENTS
+# Tuần thi, sau nghỉ lễ — config trước mỗi kỳ
+# ============================================================
+
+seasonal_events: []
+  # - type: exam_week
+  #   start: "2026-03-15"
+  #   end: "2026-03-22"
+  # - type: post_holiday
+  #   start: "2026-02-10"
+  #   end: "2026-02-14"
