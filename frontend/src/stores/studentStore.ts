@@ -4,7 +4,6 @@ import type { StudentSummary, StudentDetail, AlertLevel } from '@/types'
 import { fetchStudents, fetchStudentDetail } from '@/services/api'
 import { mockStudents, mockStudentDetail } from '@/services/mock'
 
-const USE_MOCK = false
 
 export interface StudentFilters {
   search: string
@@ -66,7 +65,7 @@ export const useStudentStore = defineStore('student', () => {
     loading.value = true
     error.value = null
     try {
-      if (USE_MOCK) {
+      if (import.meta.env.VITE_USE_MOCK === 'true') {
         students.value = mockStudents
       } else {
         students.value = await fetchStudents()
@@ -82,7 +81,7 @@ export const useStudentStore = defineStore('student', () => {
     detailLoading.value = true
     error.value = null
     try {
-      if (USE_MOCK) {
+      if (import.meta.env.VITE_USE_MOCK === 'true') {
         const found = mockStudents.find((s) => s.student_id === id)
         if (found) {
           currentStudent.value = {

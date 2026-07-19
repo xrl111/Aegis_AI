@@ -4,7 +4,6 @@ import type { OverviewStats, StudentSummary } from '@/types'
 import { fetchOverviewStats, fetchStudents } from '@/services/api'
 import { mockStats, mockStudents } from '@/services/mock'
 
-const USE_MOCK = false
 
 export const useOverviewStore = defineStore('overview', () => {
   const stats = ref<OverviewStats | null>(null)
@@ -16,7 +15,7 @@ export const useOverviewStore = defineStore('overview', () => {
     loading.value = true
     error.value = null
     try {
-      if (USE_MOCK) {
+      if (import.meta.env.VITE_USE_MOCK === 'true') {
         stats.value = mockStats
       } else {
         stats.value = await fetchOverviewStats()
@@ -32,7 +31,7 @@ export const useOverviewStore = defineStore('overview', () => {
     loading.value = true
     error.value = null
     try {
-      if (USE_MOCK) {
+      if (import.meta.env.VITE_USE_MOCK === 'true') {
         recentChanges.value = [...mockStudents]
           .sort((a, b) => {
             if (!a.updated_at) return 1
