@@ -4,7 +4,7 @@ import type { StudentSummary, StudentDetail, AlertLevel } from '@/types'
 import { fetchStudents, fetchStudentDetail } from '@/services/api'
 import { mockStudents, mockStudentDetail } from '@/services/mock'
 
-const USE_MOCK = true
+const USE_MOCK = false
 
 export interface StudentFilters {
   search: string

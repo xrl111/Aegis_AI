@@ -4,7 +4,7 @@ import type { OverviewStats, StudentSummary } from '@/types'
 import { fetchOverviewStats, fetchStudents } from '@/services/api'
 import { mockStats, mockStudents } from '@/services/mock'
 
-const USE_MOCK = true
+const USE_MOCK = false
 
 export const useOverviewStore = defineStore('overview', () => {
   const stats = ref<OverviewStats | null>(null)
