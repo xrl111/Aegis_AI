@@ -87,6 +87,35 @@ class AlertHistoryItem(BaseModel):
     details: list[str]
 
 
+class MajorStats(BaseModel):
+    major: str
+    stable: int
+    watch: int
+    review: int
+    improving: int
+    insufficient: int
+
+class SignalStatsData(BaseModel):
+    triggered: int
+    total: int
+    label: str
+
+class WeeklyTrend(BaseModel):
+    week: str
+    stable: int
+    watch: int
+    review: int
+    improving: int
+    insufficient: int
+
+class PriorityStudent(BaseModel):
+    student_id: str
+    student_name: str
+    major: str
+    alert_level: AlertLevelOut
+    triggered_signal_count: int
+    headline: str
+
 class OverviewStats(BaseModel):
     """Thống kê tổng quan cho Dashboard."""
     total_students: int
@@ -95,6 +124,10 @@ class OverviewStats(BaseModel):
     review_count: int
     insufficient_count: int
     improving_count: int
+    major_distribution: List[MajorStats] = []
+    signal_stats: dict[str, SignalStatsData] = {}
+    weekly_trend: List[WeeklyTrend] = []
+    priority_students: List[PriorityStudent] = []
 
 
 class FeedbackRequest(BaseModel):

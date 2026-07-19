@@ -9,20 +9,25 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js'
-import { mockMajorDistribution } from '@/services/mock'
+import { useOverviewStore } from '@/stores/overviewStore'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend)
 
-const chartData = computed(() => ({
-  labels: mockMajorDistribution.map((m) => m.major),
-  datasets: [
-    { label: 'Ổn định', data: mockMajorDistribution.map((m) => m.stable), backgroundColor: '#22c55e', borderRadius: 6 },
-    { label: 'Theo dõi', data: mockMajorDistribution.map((m) => m.watch), backgroundColor: '#eab308', borderRadius: 6 },
-    { label: 'Cần xem xét', data: mockMajorDistribution.map((m) => m.review), backgroundColor: '#f97316', borderRadius: 6 },
-    { label: 'Đang cải thiện', data: mockMajorDistribution.map((m) => m.improving), backgroundColor: '#3b82f6', borderRadius: 6 },
-    { label: 'Chưa đủ DL', data: mockMajorDistribution.map((m) => m.insufficient), backgroundColor: '#9ca3af', borderRadius: 6 },
-  ],
-}))
+const overviewStore = useOverviewStore()
+
+const chartData = computed(() => {
+  const dist = overviewStore.stats?.major_distribution || []
+  return {
+    labels: dist.map((m) => m.major),
+    datasets: [
+      { label: 'Ổn định', data: dist.map((m) => m.stable), backgroundColor: '#22c55e', borderRadius: 6 },
+      { label: 'Theo dõi', data: dist.map((m) => m.watch), backgroundColor: '#eab308', borderRadius: 6 },
+      { label: 'Cần xem xét', data: dist.map((m) => m.review), backgroundColor: '#f97316', borderRadius: 6 },
+      { label: 'Đang cải thiện', data: dist.map((m) => m.improving), backgroundColor: '#3b82f6', borderRadius: 6 },
+      { label: 'Chưa đủ DL', data: dist.map((m) => m.insufficient), backgroundColor: '#9ca3af', borderRadius: 6 },
+    ],
+  }
+})
 
 const chartOptions = {
   responsive: true,

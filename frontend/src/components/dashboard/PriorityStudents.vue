@@ -1,7 +1,11 @@
 <script setup lang="ts">
-import { mockPriorityStudents } from '@/services/mock'
+import { computed } from 'vue'
+import { useOverviewStore } from '@/stores/overviewStore'
 import StatusBadge from '@/components/ui/StatusBadge.vue'
 import { getInitials, getAvatarColor } from '@/utils/format'
+
+const overviewStore = useOverviewStore()
+const priorityStudents = computed(() => overviewStore.stats?.priority_students || [])
 
 const emit = defineEmits<{
   viewDetail: [studentId: string]
@@ -17,7 +21,7 @@ const emit = defineEmits<{
 
     <div class="divide-y divide-gray-100">
       <div
-        v-for="student in mockPriorityStudents"
+        v-for="student in priorityStudents"
         :key="student.student_id"
         class="flex items-center gap-3 py-3 px-2 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
         @click="emit('viewDetail', student.student_id)"

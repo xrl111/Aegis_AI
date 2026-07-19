@@ -10,70 +10,75 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js'
-import { mockWeeklyTrend } from '@/services/mock'
+import { useOverviewStore } from '@/stores/overviewStore'
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend)
 
-const chartData = computed(() => ({
-  labels: mockWeeklyTrend.map((w) => w.week),
-  datasets: [
-    {
-      label: 'Ổn định',
-      data: mockWeeklyTrend.map((w) => w.stable),
-      borderColor: '#22c55e',
-      backgroundColor: '#22c55e20',
-      tension: 0.3,
-      pointRadius: 4,
-      pointHoverRadius: 6,
-      borderWidth: 2,
-      fill: false,
-    },
-    {
-      label: 'Theo dõi',
-      data: mockWeeklyTrend.map((w) => w.watch),
-      borderColor: '#eab308',
-      backgroundColor: '#eab30820',
-      tension: 0.3,
-      pointRadius: 4,
-      pointHoverRadius: 6,
-      borderWidth: 2,
-      fill: false,
-    },
-    {
-      label: 'Cần xem xét',
-      data: mockWeeklyTrend.map((w) => w.review),
-      borderColor: '#f97316',
-      backgroundColor: '#f9731620',
-      tension: 0.3,
-      pointRadius: 4,
-      pointHoverRadius: 6,
-      borderWidth: 2,
-      fill: false,
-    },
-    {
-      label: 'Đang cải thiện',
-      data: mockWeeklyTrend.map((w) => w.improving),
-      borderColor: '#3b82f6',
-      backgroundColor: '#3b82f620',
-      tension: 0.3,
-      pointRadius: 4,
-      pointHoverRadius: 6,
-      borderWidth: 2,
-      fill: false,
-    },
-    {
-      label: 'Chưa đủ DL',
-      data: mockWeeklyTrend.map((w) => w.insufficient),
-      borderColor: '#9ca3af',
-      backgroundColor: '#9ca3af20',
-      tension: 0.3,
-      pointRadius: 4,
-      pointHoverRadius: 6,
-      borderWidth: 2,
-      fill: false,
-    },
-  ],
-}))
+const overviewStore = useOverviewStore()
+
+const chartData = computed(() => {
+  const trend = overviewStore.stats?.weekly_trend || []
+  return {
+    labels: trend.map((w) => w.week),
+    datasets: [
+      {
+        label: 'Ổn định',
+        data: trend.map((w) => w.stable),
+        borderColor: '#22c55e',
+        backgroundColor: '#22c55e20',
+        tension: 0.3,
+        pointRadius: 4,
+        pointHoverRadius: 6,
+        borderWidth: 2,
+        fill: false,
+      },
+      {
+        label: 'Theo dõi',
+        data: trend.map((w) => w.watch),
+        borderColor: '#eab308',
+        backgroundColor: '#eab30820',
+        tension: 0.3,
+        pointRadius: 4,
+        pointHoverRadius: 6,
+        borderWidth: 2,
+        fill: false,
+      },
+      {
+        label: 'Cần xem xét',
+        data: trend.map((w) => w.review),
+        borderColor: '#f97316',
+        backgroundColor: '#f9731620',
+        tension: 0.3,
+        pointRadius: 4,
+        pointHoverRadius: 6,
+        borderWidth: 2,
+        fill: false,
+      },
+      {
+        label: 'Đang cải thiện',
+        data: trend.map((w) => w.improving),
+        borderColor: '#3b82f6',
+        backgroundColor: '#3b82f620',
+        tension: 0.3,
+        pointRadius: 4,
+        pointHoverRadius: 6,
+        borderWidth: 2,
+        fill: false,
+      },
+      {
+        label: 'Chưa đủ DL',
+        data: trend.map((w) => w.insufficient),
+        borderColor: '#9ca3af',
+        backgroundColor: '#9ca3af20',
+        tension: 0.3,
+        pointRadius: 4,
+        pointHoverRadius: 6,
+        borderWidth: 2,
+        fill: false,
+      },
+    ],
+  }
+})
 
 const chartOptions = {
   responsive: true,

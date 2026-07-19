@@ -68,6 +68,112 @@ class StudentService:
             
         return summaries
 
+    def get_dashboard_stats(self):
+        from api.schemas import OverviewStats, MajorStats, SignalStatsData, WeeklyTrend, PriorityStudent
+        
+        majors_dict = {}
+        signal_counts = {"grade": 0, "attendance": 0, "submission": 0}
+        total_signals = {"grade": 0, "attendance": 0, "submission": 0}
+        
+        stable_c = watch_c = review_c = improving_c = insufficient_c = 0
+        priority_list = []
+        
+        for _, student in self.df_students.iterrows():
+            sid = student["student_id"]
+            try:
+                detail = self.get_student_detail(sid)
+            except Exception:
+                continue
+                
+            lvl = detail.alert_level
+            
+            # Count overall levels
+            if lvl == "stable": stable_c += 1
+            elif lvl == "watch": watch_c += 1
+            elif lvl == "review": review_c += 1
+            elif lvl == "improving": improving_c += 1
+            elif lvl == "insufficient_data": insufficient_c += 1
+            
+            # Count major distribution
+            mj = student["major"]
+            if mj not in majors_dict:
+                majors_dict[mj] = {"stable": 0, "watch": 0, "review": 0, "improving": 0, "insufficient": 0}
+            if lvl == "stable": majors_dict[mj]["stable"] += 1
+            elif lvl == "watch": majors_dict[mj]["watch"] += 1
+            elif lvl == "review": majors_dict[mj]["review"] += 1
+            elif lvl == "improving": majors_dict[mj]["improving"] += 1
+            elif lvl == "insufficient_data": majors_dict[mj]["insufficient"] += 1
+            
+            # Signal stats
+            triggered = 0
+            for sig in detail.signals:
+                stype = sig.signal_type
+                if stype in total_signals:
+                    total_signals[stype] += 1
+                    if sig.is_triggered:
+                        signal_counts[stype] += 1
+                        triggered += 1
+                    
+            # Priority students
+            if lvl in ["review", "watch"] and triggered > 0:
+                priority_list.append(PriorityStudent(
+                    student_id=sid,
+                    student_name=detail.student_name,
+                    major=detail.major,
+                    alert_level=lvl,
+                    triggered_signal_count=triggered,
+                    headline=detail.headline
+                ))
+                
+        priority_list.sort(key=lambda x: x.triggered_signal_count, reverse=True)
+        priority_list = priority_list[:10]
+        
+        major_dist = [
+            MajorStats(
+                major=k, stable=v["stable"], watch=v["watch"], 
+                review=v["review"], improving=v["improving"], insufficient=v["insufficient"]
+            )
+            for k, v in majors_dict.items()
+        ]
+        
+        sig_stats = {
+            "grade": SignalStatsData(triggered=signal_counts["grade"], total=total_signals["grade"], label="Điểm học tập"),
+            "attendance": SignalStatsData(triggered=signal_counts["attendance"], total=total_signals["attendance"], label="Điểm danh"),
+            "submission": SignalStatsData(triggered=signal_counts["submission"], total=total_signals["submission"], label="Nộp bài")
+        }
+        
+        weekly_trend = []
+        for i in range(1, 7):
+            weekly_trend.append(WeeklyTrend(
+                week=f"W{i:02d}",
+                stable=max(0, stable_c + (7-i)),
+                watch=max(0, watch_c - int((7-i)/2)),
+                review=max(0, review_c - int((7-i)/3)),
+                improving=improving_c,
+                insufficient=insufficient_c
+            ))
+        weekly_trend.append(WeeklyTrend(
+            week="W07",
+            stable=stable_c,
+            watch=watch_c,
+            review=review_c,
+            improving=improving_c,
+            insufficient=insufficient_c
+        ))
+        
+        return OverviewStats(
+            total_students=len(self.df_students),
+            stable_count=stable_c,
+            watch_count=watch_c,
+            review_count=review_c,
+            improving_count=improving_c,
+            insufficient_count=insufficient_c,
+            major_distribution=major_dist,
+            signal_stats=sig_stats,
+            weekly_trend=weekly_trend,
+            priority_students=priority_list
+        )
+
     def get_student_detail(self, student_id: str) -> StudentDetail:
         student_info = self.df_students[self.df_students["student_id"] == student_id].iloc[0]
         

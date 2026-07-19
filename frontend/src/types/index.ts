@@ -11,6 +11,39 @@ export type DataSufficiency = 'sufficient' | 'partial' | 'insufficient'
 
 export type ActionTaken = 'contacted' | 'meeting' | 'noted' | 'dismissed'
 
+export interface MajorStats {
+  major: string
+  stable: number
+  watch: number
+  review: number
+  improving: number
+  insufficient: number
+}
+
+export interface SignalStatsData {
+  triggered: number
+  total: number
+  label: string
+}
+
+export interface WeeklyTrend {
+  week: string
+  stable: number
+  watch: number
+  review: number
+  improving: number
+  insufficient: number
+}
+
+export interface PriorityStudent {
+  student_id: string
+  student_name: string
+  major: string
+  alert_level: AlertLevel
+  triggered_signal_count: number
+  headline: string
+}
+
 export interface OverviewStats {
   total_students: number
   stable_count: number
@@ -18,6 +51,10 @@ export interface OverviewStats {
   review_count: number
   insufficient_count: number
   improving_count: number
+  major_distribution: MajorStats[]
+  signal_stats: Record<string, SignalStatsData>
+  weekly_trend: WeeklyTrend[]
+  priority_students: PriorityStudent[]
 }
 
 export interface StudentSummary {
