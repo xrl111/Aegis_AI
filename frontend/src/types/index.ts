@@ -51,6 +51,19 @@ export interface AlertHistoryItem {
   details: string[]
 }
 
+export interface ComponentGrade {
+  assessment: string
+  score: number
+}
+
+export interface CourseDetail {
+  course_id: string
+  course_name: string
+  semester: number
+  grades: ComponentGrade[]
+  attendance_rate: number
+}
+
 export interface StudentDetail {
   student_id: string
   student_name: string
@@ -59,6 +72,7 @@ export interface StudentDetail {
   headline: string
   signals: SignalOut[]
   timeline: TimelinePoint[]
+  courses: CourseDetail[]
   alert_history: AlertHistoryItem[]
   is_seasonal_suppressed: boolean
 }

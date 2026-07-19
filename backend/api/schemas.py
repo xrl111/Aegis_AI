@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from datetime import datetime
 from enum import Enum
-from typing import Optional
+from typing import Optional, List
 
 from pydantic import BaseModel
 
@@ -41,6 +41,19 @@ class StudentSummary(BaseModel):
     updated_at: Optional[datetime] = None
 
 
+class ComponentGrade(BaseModel):
+    assessment: str
+    score: float
+
+
+class CourseDetail(BaseModel):
+    course_id: str
+    course_name: str
+    semester: int
+    grades: List[ComponentGrade]
+    attendance_rate: float
+
+
 class StudentDetail(BaseModel):
     """Chi tiết 1 học sinh cho Detail page."""
     student_id: str
@@ -48,9 +61,10 @@ class StudentDetail(BaseModel):
     major: str
     alert_level: AlertLevelOut
     headline: str
-    signals: list[SignalOut]
-    timeline: list[TimelinePoint]
-    alert_history: list[AlertHistoryItem]
+    signals: List[SignalOut]
+    timeline: List[TimelinePoint]
+    courses: List[CourseDetail] = []
+    alert_history: List[dict] = []
     is_seasonal_suppressed: bool = False
 
 

@@ -6,6 +6,7 @@ import PageTitle from '@/components/ui/PageTitle.vue'
 import HeroCard from '@/components/student-detail/HeroCard.vue'
 import SignalSection from '@/components/student-detail/SignalSection.vue'
 import TimelineChart from '@/components/student-detail/TimelineChart.vue'
+import CourseEvidence from '@/components/student-detail/CourseEvidence.vue'
 import AlertHistoryTimeline from '@/components/student-detail/AlertHistoryTimeline.vue'
 import ActionForm from '@/components/feedback/ActionForm.vue'
 
@@ -129,6 +130,7 @@ onMounted(() => {
       <template v-else>
         <HeroCard :student="studentStore.currentStudent" />
         <SignalSection :signals="studentStore.currentStudent.signals" />
+        <CourseEvidence :courses="studentStore.currentStudent.courses" />
         <TimelineChart :timeline="studentStore.currentStudent.timeline" />
         <AlertHistoryTimeline :history="studentStore.currentStudent.alert_history" />
         <ActionForm :student-id="studentStore.currentStudent.student_id" />

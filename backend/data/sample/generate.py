@@ -45,6 +45,8 @@ def generate_sample_data(output_dir="backend/data/sample"):
         {"course_id": "SWT301", "course_name": "Software Testing", "semester": 2},
         {"course_id": "PRM392", "course_name": "Mobile Dev", "semester": 2},
         {"course_id": "ITE302", "course_name": "Ethics", "semester": 2},
+        {"course_id": "WED201", "course_name": "Web Design", "semester": 2},
+        {"course_id": "PRO192", "course_name": "OOP with Java", "semester": 2},
     ]
     df_courses = pd.DataFrame(courses_data)
     df_courses.to_csv(os.path.join(output_dir, "courses.csv"), index=False, encoding="utf-8-sig")

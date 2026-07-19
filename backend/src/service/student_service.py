@@ -15,7 +15,7 @@ from src.detection import (
 )
 from src.alert import determine_alert_level, explain_grade_signal, explain_attendance_signal, explain_submission_signal
 from src.exceptions import InsufficientDataError
-from api.schemas import StudentSummary, StudentDetail, SignalOut, TimelinePoint
+from api.schemas import StudentSummary, StudentDetail, SignalOut, TimelinePoint, CourseDetail, ComponentGrade
 
 # Giả định đường dẫn data (trong thực tế có thể dùng config)
 DATA_DIR = "data/sample"
@@ -150,6 +150,9 @@ class StudentService:
         # --- TIMELINE ---
         timeline = self._build_timeline(s_grades, s_att)
 
+        # --- COURSES DETAIL ---
+        courses_detail = self._build_courses_detail(student_id)
+
         return StudentDetail(
             student_id=student_id,
             student_name=student_info["name"],
@@ -158,6 +161,7 @@ class StudentService:
             headline=headline,
             signals=signals_out,
             timeline=timeline,
+            courses=courses_detail,
             alert_history=[],
             is_seasonal_suppressed=is_seasonal
         )
@@ -204,3 +208,41 @@ class StudentService:
             ))
             
         return pts
+        
+    def _build_courses_detail(self, student_id: str) -> List[CourseDetail]:
+        s_grades_raw = self.df_grades[self.df_grades["student_id"] == student_id]
+        s_att_raw = self.df_attendance[self.df_attendance["student_id"] == student_id]
+        
+        course_ids = set(s_grades_raw["course_id"].unique()).union(set(s_att_raw["course_id"].unique()))
+        
+        courses_out = []
+        for cid in course_ids:
+            course_info = self.df_courses[self.df_courses["course_id"] == cid]
+            if course_info.empty:
+                continue
+            c_info = course_info.iloc[0]
+            
+            c_grades = s_grades_raw[s_grades_raw["course_id"] == cid]
+            grades_list = [
+                ComponentGrade(assessment=row["assessment"], score=row["score"])
+                for _, row in c_grades.iterrows()
+            ]
+            
+            c_att = s_att_raw[s_att_raw["course_id"] == cid]
+            total_sessions = len(c_att)
+            if total_sessions > 0:
+                present_count = len(c_att[c_att["status"] == "Present"])
+                late_count = len(c_att[c_att["status"] == "Late"])
+                rate = (present_count + late_count) / total_sessions
+            else:
+                rate = 1.0
+                
+            courses_out.append(CourseDetail(
+                course_id=cid,
+                course_name=c_info["course_name"],
+                semester=int(c_info["semester"]),
+                grades=grades_list,
+                attendance_rate=rate
+            ))
+            
+        return courses_out
