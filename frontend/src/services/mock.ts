@@ -173,5 +173,17 @@ export const mockStudentDetail: StudentDetail = {
       details: ['Điểm số ổn định', 'Điểm danh đầy đủ'],
     },
   ],
+  courses: [
+    {
+      course_id: "CS101",
+      course_name: "Nhập môn Lập trình",
+      semester: 1,
+      grades: [
+        { assessment: "Lab 1", score: 8.5 },
+        { assessment: "Lab 2", score: 4.0 }
+      ],
+      attendance_rate: 0.8
+    }
+  ],
   is_seasonal_suppressed: false,
 }
