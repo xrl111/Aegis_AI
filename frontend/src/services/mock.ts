@@ -4,14 +4,7 @@ import type {
   StudentDetail,
 } from '@/types'
 
-export const mockStats: OverviewStats = {
-  total_students: 48,
-  stable_count: 25,
-  watch_count: 10,
-  review_count: 5,
-  insufficient_count: 4,
-  improving_count: 4,
-}
+
 
 // ── Dashboard: Xu hướng theo tuần ──
 export const mockWeeklyTrend = [
@@ -49,6 +42,19 @@ export const mockPriorityStudents = [
   { student_id: 'SV027', student_name: 'Vũ Thanh Giang', major: 'Khoa học Máy tính', alert_level: 'watch' as const, triggered_signal_count: 1, headline: 'Nộp bài trễ 2 bài gần nhất' },
   { student_id: 'SV029', student_name: 'Đặng Văn Kiên', major: 'Trí tuệ nhân tạo', alert_level: 'watch' as const, triggered_signal_count: 1, headline: 'Điểm quiz tuần trước thấp hơn' },
 ]
+
+export const mockStats: OverviewStats = {
+  total_students: 48,
+  stable_count: 25,
+  watch_count: 10,
+  review_count: 5,
+  insufficient_count: 4,
+  improving_count: 4,
+  weekly_trend: mockWeeklyTrend,
+  major_distribution: mockMajorDistribution,
+  signal_stats: mockSignalStats,
+  priority_students: mockPriorityStudents,
+}
 
 export const mockStudents: StudentSummary[] = [
   // ── STABLE (25) ──

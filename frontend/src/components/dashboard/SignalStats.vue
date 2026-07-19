@@ -30,26 +30,26 @@ const signalStats = computed(() => overviewStore.stats?.signal_stats || {})
             <component :is="s.icon" :size="16" :style="{ color: s.color }" />
           </div>
           <span class="text-xs font-medium text-gray-600">
-            {{ signalStats[s.key].label }}
+            {{ signalStats[s.key]?.label || '' }}
           </span>
         </div>
 
         <p class="text-xl font-bold text-gray-900">
-          {{ signalStats[s.key].triggered }}<span class="text-sm font-normal text-gray-400">/{{ signalStats[s.key].total }}</span>
+          {{ signalStats[s.key]?.triggered || 0 }}<span class="text-sm font-normal text-gray-400">/{{ signalStats[s.key]?.total || 0 }}</span>
         </p>
 
         <div class="mt-2 h-1.5 bg-gray-100 rounded-full overflow-hidden">
           <div
             class="h-full rounded-full transition-all duration-500"
             :style="{
-              width: signalStats[s.key].total > 0 ? ((signalStats[s.key].triggered / signalStats[s.key].total) * 100) + '%' : '0%',
+              width: (signalStats[s.key]?.total || 0) > 0 ? (((signalStats[s.key]?.triggered || 0) / (signalStats[s.key]?.total || 1)) * 100) + '%' : '0%',
               backgroundColor: s.color,
             }"
           />
         </div>
 
         <p class="mt-1.5 text-xs text-gray-400">
-          {{ signalStats[s.key].triggered }} tín hiệu được kích hoạt
+          {{ signalStats[s.key]?.triggered || 0 }} tín hiệu được kích hoạt
         </p>
       </div>
     </div>
