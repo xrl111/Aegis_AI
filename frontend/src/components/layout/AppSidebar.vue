@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { Shield, LayoutDashboard, Users, User } from 'lucide-vue-next'
+import { useAuthStore } from '@/stores/authStore'
 
 defineProps<{
   isOpen: boolean
@@ -12,6 +13,7 @@ const emit = defineEmits<{
 }>()
 
 const route = useRoute()
+const authStore = useAuthStore()
 
 const navItems = [
   { to: '/', icon: LayoutDashboard, label: 'Tổng quan' },
@@ -78,15 +80,15 @@ function isActive(to: string): boolean {
       </router-link>
     </nav>
 
-    <!-- Teacher info -->
+    <!-- User info -->
     <div class="border-t border-gray-100 px-4 py-4">
       <div class="flex items-center gap-3 rounded-xl px-3 py-2">
         <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-100">
           <User class="h-4 w-4 text-gray-500" :stroke-width="2" />
         </div>
         <div class="min-w-0 flex-1">
-          <p class="truncate text-sm font-medium text-gray-700">Giáo viên</p>
-          <p class="truncate text-xs text-gray-400">Nguyễn Thị Giáo</p>
+          <p class="truncate text-sm font-medium text-gray-700">{{ authStore.user?.role || 'Giáo viên' }}</p>
+          <p class="truncate text-xs text-gray-400">{{ authStore.user?.name || 'Chưa đăng nhập' }}</p>
         </div>
       </div>
     </div>
