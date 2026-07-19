@@ -1,28 +1,21 @@
-"""API routes — Teacher Feedback.
-
-POST /api/feedback         → Ghi nhận phản hồi của giáo viên
-GET  /api/feedback/{id}    → Lấy lịch sử feedback cho 1 HS
-"""
-
-from fastapi import APIRouter, HTTPException
-
+from fastapi import APIRouter
 from api.schemas import FeedbackRequest, FeedbackResponse
 
-router = APIRouter()
-
+router = APIRouter(prefix="/api/feedback", tags=["feedback"])
 
 @router.post("", response_model=FeedbackResponse)
-def submit_feedback(request: FeedbackRequest) -> FeedbackResponse:
-    """Ghi nhận phản hồi của giáo viên.
-
-    Hệ thống CHỈ LOG, không tự động điều chỉnh ngưỡng hay hành vi.
+def submit_feedback(request: FeedbackRequest):
+    """Ghi nhận phản hồi của giáo viên về cảnh báo của học sinh.
+    
+    Trong hệ thống thực tế, action này sẽ lưu vào DB và reset
+    hoặc cập nhật trạng thái cảnh báo của học sinh đó.
     """
-    # TODO: Lưu vào storage (JSON file hoặc SQLite cho demo)
-    raise HTTPException(status_code=501, detail="Chưa implement")
-
-
-@router.get("/{student_id}")
-def get_feedback_history(student_id: str) -> list[dict]:
-    """Lấy lịch sử phản hồi cho 1 học sinh."""
-    # TODO: Đọc từ storage
-    raise HTTPException(status_code=501, detail="Chưa implement")
+    # Demo: print to console and return success
+    print(f"Feedback received for {request.student_id} by {request.teacher_id}: {request.action_taken}")
+    if request.notes:
+        print(f"Notes: {request.notes}")
+        
+    return FeedbackResponse(
+        success=True,
+        message="Đã ghi nhận phản hồi thành công."
+    )
