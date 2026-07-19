@@ -80,8 +80,8 @@ const chartOptions = computed(() => ({
       padding: 10,
       cornerRadius: 8,
       callbacks: {
-        label(ctx: { dataset: { label?: string }; raw: number | null }) {
-          const val = ctx.raw
+        label(ctx: any) {
+          const val = ctx.raw as number | null
           if (val === null) return `${ctx.dataset.label}: Không có`
           return `${ctx.dataset.label}: ${Math.round(val * 100)}%`
         },
