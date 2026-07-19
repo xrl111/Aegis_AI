@@ -44,6 +44,7 @@ class StudentSummary(BaseModel):
 class ComponentGrade(BaseModel):
     assessment: str
     score: float
+    class_average: float = 0.0
 
 
 class CourseDetail(BaseModel):
@@ -59,6 +60,8 @@ class StudentDetail(BaseModel):
     student_id: str
     student_name: str
     major: str
+    cgpa: float = 0.0
+    total_credits: int = 0
     alert_level: AlertLevelOut
     headline: str
     signals: List[SignalOut]

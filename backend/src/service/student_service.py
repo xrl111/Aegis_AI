@@ -157,6 +157,8 @@ class StudentService:
             student_id=student_id,
             student_name=student_info["name"],
             major=student_info["major"],
+            cgpa=float(student_info.get("cgpa", 0.0)),
+            total_credits=int(student_info.get("total_credits", 0)),
             alert_level=alert_level,
             headline=headline,
             signals=signals_out,
@@ -223,10 +225,19 @@ class StudentService:
             c_info = course_info.iloc[0]
             
             c_grades = s_grades_raw[s_grades_raw["course_id"] == cid]
-            grades_list = [
-                ComponentGrade(assessment=row["assessment"], score=row["score"])
-                for _, row in c_grades.iterrows()
-            ]
+            grades_list = []
+            for _, row in c_grades.iterrows():
+                asm = row["assessment"]
+                class_scores = self.df_grades[
+                    (self.df_grades["course_id"] == cid) & 
+                    (self.df_grades["assessment"] == asm)
+                ]["score"]
+                avg = float(class_scores.mean()) if not class_scores.empty else 0.0
+                grades_list.append(ComponentGrade(
+                    assessment=asm, 
+                    score=row["score"],
+                    class_average=round(avg, 1)
+                ))
             
             c_att = s_att_raw[s_att_raw["course_id"] == cid]
             total_sessions = len(c_att)

@@ -25,10 +25,16 @@ def generate_sample_data(output_dir="backend/data/sample"):
         else:
             behavior = scenarios[i - num_normal - 1]
             
+        # Random CGPA and Credits
+        cgpa = round(random.uniform(5.0, 9.5), 1)
+        credits = random.randint(15, 120)
+        
         students_data.append({
             "student_id": sid,
             "name": f"Nguyễn Văn {chr(64+i) if i <= 26 else str(i)}",
-            "major": "IT"
+            "major": "IT",
+            "cgpa": cgpa,
+            "total_credits": credits
         })
         student_behaviors[sid] = behavior
         

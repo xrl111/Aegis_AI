@@ -42,7 +42,11 @@ function formatScore(score: number): string {
                   class="bg-gray-50 border border-gray-200 rounded px-2 py-1 text-xs"
                 >
                   <span class="text-gray-500">{{ g.assessment }}:</span> 
-                  <span class="font-medium text-gray-900 ml-1">{{ formatScore(g.score) }}</span>
+                  <span 
+                    class="font-medium ml-1"
+                    :class="g.score <= g.class_average - 2.0 ? 'text-red-600 font-bold' : 'text-gray-900'"
+                  >{{ formatScore(g.score) }}</span>
+                  <span class="text-gray-400 ml-1 font-normal">(avg: {{ formatScore(g.class_average) }})</span>
                 </div>
               </div>
             </td>

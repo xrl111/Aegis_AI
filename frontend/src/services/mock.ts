@@ -112,10 +112,12 @@ export const mockStudents: StudentSummary[] = [
 
 // ── Chi tiết cho SV036 (review) ──
 export const mockStudentDetail: StudentDetail = {
-  student_id: 'SV036',
-  student_name: 'Đỗ Văn Hùng',
-  major: 'Trí tuệ nhân tạo',
-  alert_level: 'review',
+  student_id: 'SV001',
+  student_name: 'Nguyễn Văn A',
+  major: 'Khoa học Máy tính',
+  cgpa: 8.2,
+  total_credits: 75,
+  alert_level: 'stable',
   headline: 'Điểm giảm liên tục 3 tuần, cần giáo viên xem xét',
   signals: [
     {
@@ -179,8 +181,9 @@ export const mockStudentDetail: StudentDetail = {
       course_name: "Nhập môn Lập trình",
       semester: 1,
       grades: [
-        { assessment: "Lab 1", score: 8.5 },
-        { assessment: "Lab 2", score: 4.0 }
+          { assessment: 'Lab 1', score: 8.0, class_average: 7.5 },
+          { assessment: 'Lab 2', score: 7.5, class_average: 7.0 },
+          { assessment: 'Midterm', score: 8.5, class_average: 7.0 },
       ],
       attendance_rate: 0.8
     }

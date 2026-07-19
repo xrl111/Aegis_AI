@@ -54,6 +54,7 @@ export interface AlertHistoryItem {
 export interface ComponentGrade {
   assessment: string
   score: number
+  class_average: number
 }
 
 export interface CourseDetail {
@@ -68,6 +69,8 @@ export interface StudentDetail {
   student_id: string
   student_name: string
   major: string
+  cgpa: number
+  total_credits: number
   alert_level: AlertLevel
   headline: string
   signals: SignalOut[]

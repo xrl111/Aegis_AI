@@ -26,6 +26,15 @@ defineProps<{
         <p class="text-sm text-gray-500 mt-0.5">
           {{ student.student_id }} &middot; {{ student.major }}
         </p>
+        
+        <div class="mt-2 flex gap-3 text-sm">
+          <span class="bg-indigo-50 text-indigo-700 px-2.5 py-0.5 rounded-md border border-indigo-100 font-medium">
+            CGPA: {{ student.cgpa.toFixed(1) }}
+          </span>
+          <span class="bg-slate-50 text-slate-700 px-2.5 py-0.5 rounded-md border border-slate-200 font-medium">
+            Tín chỉ: {{ student.total_credits }}
+          </span>
+        </div>
 
         <div class="mt-3">
           <StatusBadge :level="student.alert_level" size="md" />
